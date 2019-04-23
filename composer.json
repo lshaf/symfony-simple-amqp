@@ -3,7 +3,6 @@
     "description": "Simple AMQP Implementation for symfony",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "version": "1.0.0",
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
