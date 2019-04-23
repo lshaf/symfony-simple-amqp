@@ -21,10 +21,11 @@ class AMQPExtension extends Extension
         // replace with default config
         $defaultConfig = [
             'listener' => [
-                'namespace' => "AppBundle\\jobs\\"
+                'namespace' => "AppBundle\\Jobs\\"
             ],
             'options' => [
                 'queueName' => null,
+                'debug' => false,
                 'autoDelete' => false,
                 'passive' => false,
                 'durable' => true,
@@ -41,11 +42,37 @@ class AMQPExtension extends Extension
             ],
         ];
     
-    
         $definition = new Definition(AMQPService::class, [
-            'config' => array_merge_recursive($defaultConfig, $config)
+            'config' => $this->mergeArray($defaultConfig, $config),
+            'logger' => '@logger'
         ]);
         $container->setDefinition('lshaf.amqp', $definition);
+    }
+    
+    public function mergeArray($a, $b)
+    {
+        $args = func_get_args();
+        $res = array_shift($args);
+        while (!empty($args)) {
+            foreach (array_shift($args) as $k => $v) {
+                if ($v instanceof UnsetArrayValue) {
+                    unset($res[$k]);
+                } elseif ($v instanceof ReplaceArrayValue) {
+                    $res[$k] = $v->value;
+                } elseif (is_int($k)) {
+                    if (array_key_exists($k, $res)) {
+                        $res[] = $v;
+                    } else {
+                        $res[$k] = $v;
+                    }
+                } elseif (is_array($v) && isset($res[$k]) && is_array($res[$k])) {
+                    $res[$k] = $this->mergeArray($res[$k], $v);
+                } else {
+                    $res[$k] = $v;
+                }
+            }
+        }
+        return $res;
     }
     
     public function getAlias()
