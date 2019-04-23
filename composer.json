@@ -1,0 +1,19 @@
+{
+    "name": "lshaf/symfony-simple-amqp",
+    "description": "Simple AMQP Implementation for symfony",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "version": "1.0.0",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0.0",
+        "symfony/symfony": ">=3.2.0",
+        "php-amqplib/php-amqplib": "^2.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "lshaf\\amqp\\": "src/"
+        }
+    }
+}

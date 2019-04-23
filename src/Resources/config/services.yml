@@ -1,0 +1,4 @@
+services:
+  lshaf.amqp:
+    class: lshaf\amqp\Services\AMQPService
+    arguments: { config: "%lshaf_amqp%" }
