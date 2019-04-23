@@ -2,35 +2,30 @@
 
 namespace lshaf\amqp\Command;
 
-use lshaf\amqp\Services\AMQPService;
-use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListenCommand extends ContainerAwareCommand
+class ProcessCommand extends ContainerAwareCommand
 {
     /** @var \lshaf\amqp\Services\AMQPService */
     private $amqp;
-    
+    private $logger;
     protected function configure()
     {
-        $this->setName("amqp:listen")
-            ->setDescription("Listen AMQP for debugging purpose");
+        $this->setName("amqp:process")
+            ->setDescription("Process input from amqp based on process class");
     }
     
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $this->amqp = $this->getContainer()->get('lshaf.amqp');
+        $container    = $this->getContainer();
+        $this->amqp   = $container->get("lshaf.amqp");
+        $this->logger = $container->get('logger');
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->amqp->listen(function (AMQPMessage $msg) {
-            dump([
-                'body' => $msg->getBody(),
-                'delivery_info' => $msg->delivery_info,
-            ]);
-        });
+        $this->amqp->process($this->logger);
     }
 }
