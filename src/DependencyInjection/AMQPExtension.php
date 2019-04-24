@@ -20,10 +20,8 @@ class AMQPExtension extends Extension
         
         // replace with default config
         $defaultConfig = [
-            'listener' => [
-                'namespace' => "AppBundle\\Jobs\\"
-            ],
             'options' => [
+                'namespace' => "AppBundle\\Jobs\\",
                 'queueName' => null,
                 'debug' => false,
                 'autoDelete' => false,
@@ -44,7 +42,6 @@ class AMQPExtension extends Extension
     
         $definition = new Definition(AMQPService::class, [
             'config' => $this->mergeArray($defaultConfig, $config),
-            'logger' => '@logger'
         ]);
         $container->setDefinition('lshaf.amqp', $definition);
     }

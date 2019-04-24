@@ -50,9 +50,45 @@ class AMQPService
         return $channel;
     }
     
+    private $_declaredExchange = [];
+    public function bindExchange($exchange, $type, array $key = [])
+    {
+        $keyExchange = "{$exchange}.{$type}";
+        $channel = $this->getChannel();
+        $opts = $this->_config['options'];
+        
+        if (!in_array($keyExchange, $this->_declaredExchange)) {
+            $channel->exchange_declare(
+                $exchange,
+                $type,
+                $opts['passive'],
+                $opts['durable'],
+                $opts['autoDelete'],
+                false,
+                $opts['nowait']
+            );
+        }
+        
+        if (count($key) == 0) {
+            $channel->queue_bind(
+                $opts['queueName'],
+                $exchange
+            );
+        } else {
+            foreach ($key as $route) {
+                $channel->queue_bind(
+                    $opts['queueName'],
+                    $exchange,
+                    $route
+                );
+            }
+        }
+    }
+    
     /**
      * @param string|array $data
-     * @param string $exchange
+     * @param string       $exchange
+     * @param string       $key
      */
     public function send($data, $exchange = '', $key = '')
     {
