@@ -1,10 +1,15 @@
 # Symfony Simple AMQP
 ===
+
 I make this based on my needs
+
+### Instalation
+
+add `new lshaf\amqp\AMQPBundle()` to `AppKernel.php`
 
 ### Configuration
 ```
-$defaultConfig = [
+[
 	'listener' => [
 		'namespace' => "AppBundle\\jobs\\"
 	],
@@ -24,5 +29,5 @@ $defaultConfig = [
 		'vhost' => '/',
 		'port' => 5672
 	],
-];
+]
 ```
