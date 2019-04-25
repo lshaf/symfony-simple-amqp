@@ -119,7 +119,13 @@ class AMQPService
     public function process(LoggerInterface $logger = null)
     {
         $debug = $this->_config['options']['debug'];
-        $namespace = $this->_config['listener']['namespace'];
+        $namespace = $this->_config['options']['namespace'];
+        $exchanges = $this->_config['options']['exchanges'];
+        
+        foreach ($exchanges as $exchange => $keys) {
+            $this->bindExchange($exchange, 'direct', $keys);
+        }
+        
         $this->listen(function (AMQPMessage $msg) use ($namespace, $logger, $debug) {
             try {
                 if ($debug and $logger) {
@@ -146,12 +152,11 @@ class AMQPService
         
                 $instance->execute();
                 if ($debug and $logger) {
-                    $logger->info(" [>] RUN command {$command} in {$className}");
+                    $logger->info(" [>] RUN script {$className}");
                 }
             } catch (\Exception $e) {
                 if ($debug and $logger)  {
                     $logger->error($e->getMessage());
-                    $logger->error($e->getTraceAsString());
                 }
             }
         });
