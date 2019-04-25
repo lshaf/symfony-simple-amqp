@@ -18,31 +18,7 @@ class AMQPExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
-        // replace with default config
-        $defaultConfig = [
-            'options' => [
-                'namespace' => "AppBundle\\Jobs\\",
-                'queueName' => null,
-                'debug' => false,
-                'autoDelete' => false,
-                'passive' => false,
-                'durable' => true,
-                'exclusive' => false,
-                'nowait' => false,
-                'meta' => []
-            ],
-            'connection' => [
-                'host' => '127.0.0.1',
-                'user' => 'guest',
-                'password' => 'guest',
-                'vhost' => '/',
-                'port' => 5672
-            ],
-        ];
-    
-        $definition = new Definition(AMQPService::class, [
-            'config' => $this->mergeArray($defaultConfig, $config),
-        ]);
+        $definition = new Definition(AMQPService::class, [$config]);
         $container->setDefinition('lshaf.amqp', $definition);
     }
     
