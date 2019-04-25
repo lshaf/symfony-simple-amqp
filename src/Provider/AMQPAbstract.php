@@ -25,6 +25,11 @@ abstract class AMQPAbstract
         $this->init();
     }
     
+    public function init()
+    {
+        // do nothing
+    }
+    
     final protected function getContainer()
     {
         return $this->container;
