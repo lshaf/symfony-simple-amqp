@@ -10,7 +10,7 @@ class ProcessCommand extends ContainerAwareCommand
 {
     /** @var \lshaf\amqp\Services\AMQPService */
     private $amqp;
-    private $logger;
+    private $container;
     protected function configure()
     {
         $this->setName("amqp:process")
@@ -19,14 +19,13 @@ class ProcessCommand extends ContainerAwareCommand
     
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        $container    = $this->getContainer();
-        $this->amqp   = $container->get("lshaf.amqp");
-        $this->logger = $container->get('logger');
+        $this->container = $container = $this->getContainer();
+        $this->amqp = $container->get("lshaf.amqp");
     }
     
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(" [#] Listening your service");
-        $this->amqp->process($this->logger);
+        $this->amqp->process($this->container);
     }
 }
