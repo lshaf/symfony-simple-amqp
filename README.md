@@ -7,7 +7,7 @@ I make this based on my needs
 add `new lshaf\amqp\AMQPBundle()` to `AppKernel.php`
 
 ### Configuration
-```yml
+```yaml
 lshaf_amqp:
 	connection:
 		host: 127.0.0.1
