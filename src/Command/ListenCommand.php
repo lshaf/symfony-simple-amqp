@@ -27,9 +27,11 @@ class ListenCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->amqp->listen(function (AMQPMessage $msg) {
+            $info = $msg->delivery_info;
+            unset($info['channel']);
             dump([
                 'body' => $msg->getBody(),
-                'delivery_info' => $msg->delivery_info,
+                'delivery_info' => $info,
             ]);
         });
     }
