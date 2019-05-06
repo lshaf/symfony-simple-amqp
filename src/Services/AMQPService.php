@@ -105,11 +105,17 @@ class AMQPService
     public function listen($callback)
     {
         $opts = $this->_config['options'];
+        $exchanges = $opts['exchanges'];
         $channel = $this->getChannel();
         $channel->basic_consume(
             $opts['queueName'], '', false, true,
             $opts['exclusive'], $opts['nowait'], $callback
         );
+    
+        foreach ($exchanges as $exchange => $keys) {
+            $this->bindExchange($exchange, 'direct', $keys);
+        }
+
         while (count($channel->callbacks)) {
             $channel->wait();
         }
