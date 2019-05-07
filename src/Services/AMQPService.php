@@ -146,12 +146,13 @@ class AMQPService
                     throw new \Exception('ERROR DECODE JSON');
                 }
                 
+                $exchange = $msg->delivery_info['exchange'];
                 $routingKey = $msg->delivery_info['routing_key'];
                 $classFile = preg_replace_callback('/(^|_|\.)+(.)/', function ($match) {
                     return ('.' === $match[1] ? '_' : '').strtoupper($match[2]);
                 }, $routingKey);
                 $namespace = rtrim($namespace, "\\");
-                $className = $namespace . "\\{$classFile}Job";
+                $className = $namespace . "\\{$exchange}\\{$classFile}Job";
                 
                 if (!class_exists($className)) {
                     throw new \Exception("Class {$className} is not exist");
