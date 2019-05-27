@@ -20,7 +20,8 @@ class AMQPService
             $config['connection']['host'],
             $config['connection']['port'],
             $config['connection']['user'],
-            $config['connection']['password']
+            $config['connection']['password'],
+            $config['connection']['vhost']
         );
     }
     
