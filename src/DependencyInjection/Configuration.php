@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode("user")->defaultValue('guest')->end()
                         ->scalarNode("password")->defaultValue('guest')->end()
                         ->integerNode("port")->defaultValue(5672)->end()
-                        ->integerNode("vhost")->defaultValue('/')->end()
+                        ->scalarNode("vhost")->defaultValue('/')->end()
                     ->end()
                 ->end()
                 ->arrayNode("options")
