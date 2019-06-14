@@ -132,12 +132,15 @@ class AMQPService
             $this->bindExchange($exchange, 'direct', $keys);
         }
         
-        $this->listen(function (AMQPMessage $msg) use ($namespace, $container, $debug) {
+        $logger = false;
+        if ($container) {
+            $logger = $container->get('logger');
+        }
+        
+        $debugString = ($debug ? "" : "IN") . "ACTIVE";
+        if ($logger) $logger->info(" [#] DEBUG MODE IS {$debugString}");
+        $this->listen(function (AMQPMessage $msg) use ($namespace, $logger, $container, $debug) {
             try {
-                $logger = false;
-                if ($container) {
-                    $logger = $container->get('logger');
-                }
                 if ($debug and $logger) {
                     $logger->info(" [#] Received: " . $msg->getBody());
                 }
