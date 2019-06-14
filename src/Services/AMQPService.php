@@ -167,13 +167,14 @@ class AMQPService
                     throw new \Exception("Class {$className} must be instance of " . AMQPAbstract::class);
                 }
                 
-                $instance->execute();
                 if ($debug and $logger) {
                     $logger->info(" [>] RUN script {$className}");
                 }
+
+                $instance->execute();
             } catch (\Exception $e) {
                 if ($debug and $logger)  {
-                    $logger->error($e->getMessage());
+                    $logger->error("{$e->getFile()}[{$e->getLine()}]:  " . $e->getMessage());
                 }
             }
         });
