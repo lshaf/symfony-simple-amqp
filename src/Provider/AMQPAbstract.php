@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AMQPAbstract
 {
-    private $container;
+    private $container, $doctrine, $manager, $connection;
     private $command;
     private $data;
     private $params;
@@ -17,17 +17,34 @@ abstract class AMQPAbstract
         $this->data = $config['data'] ?? null;
         $this->params = $config['params'] ?? null;
         $this->container = $container;
+        $this->doctrine = $container->get("doctrine");
+        $this->manager = $this->doctrine->getManager();
+        $this->connection = $this->doctrine->getConnection();
         
         if (is_null($this->command) or $this->command == "") {
             throw new \InvalidArgumentException("Command can't be null");
         }
         
-        $this->init();
+        /** Ping connection */
+        if ($this->connection->ping() === false) {
+            $this->connection->close();
+            $this->connection->connect();
+        }
     }
     
-    public function init()
+    public function getDoctrine()
     {
-        // do nothing
+        return $this->doctrine;
+    }
+    
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+    
+    public function getManager()
+    {
+        return $this->manager;
     }
     
     final protected function getContainer()
