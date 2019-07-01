@@ -25,6 +25,11 @@ class AMQPService
         );
     }
     
+    public function getConfig()
+    {
+        return $this->_config;
+    }
+    
     private $_lastChannel;
     private $_declaredChannel = [];
     public function getChannel($channel_id = null)
