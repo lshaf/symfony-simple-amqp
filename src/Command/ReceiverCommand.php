@@ -49,7 +49,7 @@ class ReceiverCommand extends ContainerAwareCommand
             $exchange = $input->getArgument("exchange_name");
             $routingKey = $input->getArgument("routing_key");
             $rawMessage = $input->getArgument("message");
-            $message = @base64_decode($rawMessage);
+            $message = @file_get_contents($rawMessage);
             
             if ($debug) {
                 $this->logger->info(" [#] Received: " . $rawMessage);
