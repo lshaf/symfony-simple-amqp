@@ -34,6 +34,7 @@ class ListenCommand extends ContainerAwareCommand
         $output->writeln(" [#] Listening your service");
         
         if ($isDebug == "1") {
+            $output->writeln(" [#] Debugging mode");
             $this->amqp->listen(function (AMQPMessage $msg) {
                 $info = $msg->delivery_info;
                 unset($info['channel']);
@@ -43,6 +44,7 @@ class ListenCommand extends ContainerAwareCommand
                 ]);
             });
         } else {
+            $output->writeln(" [#] Waiting for data transmission");
             $this->amqp->process($this->container);
         }
     }

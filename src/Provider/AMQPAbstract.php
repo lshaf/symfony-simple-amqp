@@ -2,16 +2,18 @@
 
 namespace lshaf\amqp\Provider;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AMQPAbstract
 {
     private $container, $manager, $connection;
     private $command, $data, $params;
-    protected $doctrine;
+    protected $doctrine, $output;
     
-    public function __construct(ContainerInterface $container, array $config)
+    public function __construct(ContainerInterface $container, array $config, OutputInterface $output)
     {
+        $this->output = $output;
         $this->command = $config['command'] ?? null;
         $this->data = $config['data'] ?? null;
         $this->params = $config['params'] ?? null;
