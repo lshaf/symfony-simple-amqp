@@ -74,7 +74,7 @@ abstract class AMQPAbstract
             $this->$command();
         } else {
             $selfClass = static::class;
-            throw new \Exception("Class {$selfClass} has no command {$command} " . AMQPAbstract::class);
+            throw new \Exception("Class {$selfClass} has no command [{$command}]");
         }
     }
 }
