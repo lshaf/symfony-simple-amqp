@@ -2,7 +2,6 @@
 
 namespace lshaf\amqp\Provider;
 
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AMQPAbstract
@@ -11,9 +10,8 @@ abstract class AMQPAbstract
     private $command, $data, $params;
     protected $doctrine, $output;
     
-    public function __construct(ContainerInterface $container, array $config, OutputInterface $output)
+    public function __construct(ContainerInterface $container, array $config)
     {
-        $this->output = $output;
         $this->command = $config['command'] ?? null;
         $this->data = $config['data'] ?? null;
         $this->params = $config['params'] ?? null;
@@ -74,6 +72,9 @@ abstract class AMQPAbstract
         $command = $this->getCommand();
         if (method_exists($this, $command)) {
             $this->$command();
+        } else {
+            $selfClass = static::class;
+            throw new \Exception("Class {$selfClass} has no command {$command} " . AMQPAbstract::class);
         }
     }
 }

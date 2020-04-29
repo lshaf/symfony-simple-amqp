@@ -74,7 +74,7 @@ class ReceiverCommand extends ContainerAwareCommand
                 throw new \Exception("Class {$className} is not exist");
             }
             
-            $instance = new $className($this->getContainer(), $data, $output);
+            $instance = new $className($this->getContainer(), $data);
             if (!($instance instanceof AMQPAbstract)) {
                 throw new \Exception("Class {$className} must be instance of " . AMQPAbstract::class);
             }
