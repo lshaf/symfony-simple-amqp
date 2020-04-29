@@ -6,12 +6,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AMQPAbstract
 {
-    private $container, $doctrine, $manager, $connection;
-    private $command;
-    private $data;
-    private $params;
+    private $container, $manager, $connection;
+    private $command, $data, $params;
+    protected $doctrine;
     
-    final public function __construct(ContainerInterface $container, array $config)
+    public function __construct(ContainerInterface $container, array $config)
     {
         $this->command = $config['command'] ?? null;
         $this->data = $config['data'] ?? null;
@@ -67,5 +66,12 @@ abstract class AMQPAbstract
         return  $this->params;
     }
     
-    abstract public function execute();
+    public function execute()
+    {
+        $this->doctrine = $this->getContainer()->get('doctrine');
+        $command = $this->getCommand();
+        if (method_exists($this, $command)) {
+            $this->$command();
+        }
+    }
 }

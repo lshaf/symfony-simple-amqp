@@ -1,6 +1,7 @@
 # Symfony Simple AMQP
 
 I make this based on my needs
+Only work for symfony 3.2
 
 ### Instalation
 
